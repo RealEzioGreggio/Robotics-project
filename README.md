@@ -101,17 +101,24 @@ Regarding the launch arguments you need to provide only **use_slam** and if you 
 
 ## Fast launch commads:
 
+### Small_house with slam
+
 ```bash
 ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=true
 ```
+### Small_house with amcl
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=false map_name:=small_house
+```
+
+### Small_warehouse with slam
 
 ```bash
 ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=true
 ```
 
-```bash
-ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=false map_name:=small_house
-```
+### Small_warehouse with amcl
 
 ```bash
 ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=false map_name:=small_warehouse
