@@ -54,7 +54,7 @@
             <plugin filename="ignition-gazebo-imu-system" name="ignition::gazebo::systems::Imu"></plugin>
             <!-- Carico il plugin per simulare il lidar-->
             <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
-              <render_engine>ogre</render_engine> <!-- OGRE2 RENDERIZZA COME AL CAZZO INOLTRE DEVI USARE LA GPU E SE HAI UNA SCHEDA NVIDIA BUONA FORTUNA-->
+              <render_engine>ogre</render_engine> <!-- CHANGE THIS IF YOU HAVE SOME RENDERING PROBLEMS-->
             </plugin>
 
 

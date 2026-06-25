@@ -14,7 +14,7 @@ The robot can perform **SLAM (Simultaneous Localization and Mapping)** in unknow
 * Global localization using AMCL.
 * Dynamic object/person following.
 * Shared software architecture for both simulation and real-world deployment.
-* Teleoperation via keyboard or joystick.
+* Teleoperation via keyboard or joystick (Remember to plug in the controller before starting the container!)
 * Configurable robot parameters, including wheel radius and wheel separation. It is recommended to keep the default values, which match the physical robot.
 * An additional node can inject measurement errors into the wheel radius and wheel separation parameters, producing a more realistic odometry model that better resembles real-world robot behavior.
 
@@ -123,6 +123,47 @@ ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_wareho
 ```bash
 ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=false map_name:=small_warehouse
 ```
+
+## Troubleshooting
+
+### Container startup issues
+
+The container is configured to use the host computer's physical GPU. Depending on your hardware and software configuration, this may cause startup issues.
+
+If this happens, try launching the container without GPU support:
+
+```bash
+xhost +local:root
+
+docker run -it --rm \
+    --net=host \
+    --ipc=host \
+    --privileged \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v ~/.Xauthority:/root/.Xauthority \
+    -v ./ros_ws/:/root/ros_workspace \
+    --device=/dev/input \
+    --name lab1 \
+    ros:livelab1 bash
+```
+
+### Gazebo rendering issues
+
+If you experience rendering problems in Gazebo, especially with the laser scanner rays, open:
+
+```text
+src/bumperbot_description/urdf/bumperbot_gazebo.xacro
+```
+
+and change the rendering engine configuration to:
+
+```xml
+<render_engine>ogre2</render_engine>
+```
+
+(around line 57 of the file).
+ 
 
 
 
