@@ -1,5 +1,24 @@
 FROM ros:humble
 RUN apt update -y && apt install ros-humble-turtlesim* -y
-RUN apt install -y ros-humble-rqt-graph
-RUN apt install -y wget
+RUN apt update -y && apt install -y ros-humble-rqt-graph
+RUN apt update -y && apt install -y wget
+RUN apt update -y && apt install -y && apt install ros-humble-twist-mux -y
+RUN apt update -y && apt install ros-humble-ros2-control -y
+RUN apt update -y && apt install ros-humble-ros2-controllers -y
+RUN apt update -y && apt install ros-humble-*-ros2-control -y
+RUN apt update -y && apt install ros-humble-joint-state-publisher-gui -y
+RUN apt update -y && apt install ros-humble-robot-localization -y
+RUN apt update -y && apt install ros-humble-navigation2 -y
+RUN apt update -y && apt install ros-humble-nav2-bringup -y
+RUN apt update -y && apt install ros-humble-nav2-controller -y
+RUN apt update -y && apt install libserial-dev -y
+RUN apt update -y && apt install ros-humble-ros-gz* -y
+RUN apt update -y && apt install ros-humble-joy -y
+RUN apt update -y && apt install ros-humble-joy-teleop -y
+RUN apt update -y && apt install ros-humble-xacro -y
+RUN apt update -y && apt install ros-humble-tf-transformations -y
+RUN apt update -y && apt install python3-pip -y
+RUN apt update -y && pip install transforms3d
+
+
 # RUN apt install -y ros-humble-example-interfaces

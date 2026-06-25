@@ -1,6 +1,4 @@
-ros_ws/build/
-ros_ws/install/
-ros_ws/log/
-ros_ws/core.*
-
-*.swp
+build/
+install/
+log/
+core.*

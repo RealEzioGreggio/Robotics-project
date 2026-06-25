@@ -1,0 +1,13 @@
+bt_navigator:
+  ros__parameters:
+    use_sim_time: true
+    global_frame: map
+    robot_base_frame: base_link
+    odom_topic: /bumperbot_controller/odom
+    transform_tolerance: 0.3 #Tolleranza usata quando va a ricavare la trasformata fra i frame nel tf2 
+    default_server_timeout: 1000 #in ms indica il timeout usato da ogni action server caricata nel bt_naviagator
+    bt_loop_duration: 10 #10ms genera un nuovo tick signal 
+    wait_for_service_timeout: 1000 #1s timeout usato da ogni service client per la risposta del server
+    default_nav_to_pose_bt_xml: "/root/ros_workspace/src/navigation/Groot2_BT/simple_nav_w_replanning.xml" #Usa Groot2 per creare il file xml che descrive il BT. Salvalo e imposta il plugin nav_to_pose del bt_navigator per usare questo BT
+    default_nav_through_poses_bt_xml: "/root/ros_workspace/src/navigation/Groot2_BT/simple_nav_w_replanning.xml" #Anche il plugin nav_through_poses usera lo stesso BT. simulato con docker: /root/ros_workspace/src/navigation/Groot2_BT/ || "/home/raspberry/bumperbot_ws/src/navigation/Groot2_BT/simple_nav_w_replanning.xml"
+

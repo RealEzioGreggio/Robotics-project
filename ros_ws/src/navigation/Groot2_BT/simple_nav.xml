@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="Untitled">
+    <RecoveryNode number_of_retries="1">
+      <PipelineSequence>
+        <RateController hz="1.0">
+          <ComputePathToPose start=""
+                             use_start="false"
+                             goal="{goal}"
+                             viapoints=""
+                             planner_id="GridBased"
+                             server_name=""
+                             server_timeout=""
+                             path="{path}"
+                             error_code_id=""
+                             error_msg=""/>
+        </RateController>
+        <FollowPath path="{path}"
+                    controller_id="FollowPath"
+                    goal_checker_id=""
+                    progress_checker_id=""
+                    path_handler_id=""
+                    server_name=""
+                    server_timeout=""
+                    tracking_feedback=""
+                    error_code_id=""
+                    error_msg=""/>
+      </PipelineSequence>
+      <Sequence>
+        <Spin spin_dist="1.57"
+              time_allowance="10.0"
+              is_recovery="true"
+              disable_collision_checks="false"
+              server_name=""
+              server_timeout=""
+              error_code_id=""
+              error_msg=""/>
+        <Wait wait_duration="5.0"
+              server_name=""
+              server_timeout=""
+              error_code_id=""
+              error_msg=""/>
+        <BackUp backup_dist="0.15"
+                backup_speed="0.025"
+                time_allowance="10.0"
+                disable_collision_checks="false"
+                server_name=""
+                server_timeout=""
+                error_code_id=""
+                error_msg=""/>
+      </Sequence>
+    </RecoveryNode>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="BackUp">
+      <input_port name="backup_dist"
+                  default="0.15"
+                  type="double">Total distance to backup (m).</input_port>
+      <input_port name="backup_speed"
+                  default="0.025"
+                  type="double">Backup speed (m/s).</input_port>
+      <input_port name="time_allowance"
+                  default="10.0"
+                  type="double">Time to invoke behavior for, if exceeds considers it a stuck condition or failure case (seconds).</input_port>
+      <input_port name="disable_collision_checks"
+                  default="false"
+                  type="bool">Disable collision checking.</input_port>
+      <input_port name="server_name"
+                  type="string">Action server name. If not specified, `backup` is used.</input_port>
+      <input_port name="server_timeout"
+                  type="chrono::milliseconds">Action server timeout (ms). If not provided, uses the BT Navigator's `default_server_timeout` parameter value (20 ms by default).</input_port>
+      <output_port name="error_code_id"
+                   type="uint16">Backup error code. See `BackUp` action message for the enumerated set of error codes.</output_port>
+      <output_port name="error_msg"
+                   type="string">Backup error message. See `BackUp` action message for the enumerated set of error codes.</output_port>
+    </Action>
+    <Action ID="ComputePathToPose">
+      <input_port name="start"
+                  type="geometry_msgs::msg::PoseStamped">Start pose. Optional. Used as the planner start pose instead of the current robot pose, if `use_start` is not false (i.e. not provided or set to true). Takes in a blackboard variable, e.g. "{start}".</input_port>
+      <input_port name="use_start"
+                  type="bool">Optional. For using or not using (i.e. ignoring) the provided start pose `start`. Takes in a blackboard variable, e.g. "{use_start}".</input_port>
+      <input_port name="goal"
+                  type="geometry_msgs::msg::PoseStamped">Goal pose. Takes in a blackboard variable, e.g. "{goal}".</input_port>
+      <input_port name="viapoints"
+                  type="vector&lt;geometry_msgs::msg::PoseStamped&gt;">Optional. A list of intermediate viapoints (excluding goal) to consider for planning. Takes in a blackboard variable, e.g. "{viapoints}".</input_port>
+      <input_port name="planner_id"
+                  default="&quot;&quot;"
+                  type="string">Mapped name to the planner plugin type to use, e.g. GridBased.</input_port>
+      <input_port name="server_name"
+                  type="string">Action server name. If not specified, `compute_path_to_pose` is used.</input_port>
+      <input_port name="server_timeout"
+                  type="chrono::milliseconds">Action server timeout (ms). If not provided, uses the BT Navigator's `default_server_timeout` parameter value (20 ms by default).</input_port>
+      <output_port name="path"
+                   type="nav_msgs::msg::Path">Path created by action server. Takes in a blackboard variable, e.g. "{path}".</output_port>
+      <output_port name="error_code_id"
+                   type="uint16">Compute path to pose error code. See `ComputePathToPose` action message for the enumerated set of error codes.</output_port>
+      <output_port name="error_msg"
+                   type="string">Compute path to pose error message. See `ComputePathToPose` action message for the enumerated set of error codes.</output_port>
+    </Action>
+    <Action ID="FollowPath">
+      <input_port name="path"
+                  type="nav_msgs::msg::Path">Takes in a blackboard variable containing the path to follow, eg. "{path}".</input_port>
+      <input_port name="controller_id"
+                  type="string">Mapped name of the controller plugin type to use, e.g. FollowPath.</input_port>
+      <input_port name="goal_checker_id"
+                  type="string">Mapped name of the goal checker plugin type to use, e.g. SimpleGoalChecker.</input_port>
+      <input_port name="progress_checker_id"
+                  type="string">Mapped name of the progress checker plugin type to use, e.g. SimpleProgressChecker.</input_port>
+      <input_port name="path_handler_id"
+                  type="string">Mapped name of the path handler plugin type to use, e.g. FeasiblePathHandler.</input_port>
+      <input_port name="server_name"
+                  type="string">Action server name. If not specified, `follow_path` is used.</input_port>
+      <input_port name="server_timeout"
+                  type="chrono::milliseconds">Action server timeout (ms). If not provided, uses the BT Navigator's `default_server_timeout` parameter value (20 ms by default).</input_port>
+      <output_port name="tracking_feedback"
+                   type="nav2_msgs::msg::TrackingFeedback">Tracking feedback message from the controller server, including cross track error, current path index, remaining path length, etc.</output_port>
+      <output_port name="error_code_id"
+                   type="uint16">Follow path error code. See `FollowPath` action for the enumerated set of error code definitions.</output_port>
+      <output_port name="error_msg"
+                   type="string">Follow path error message. See `FollowPath` action for the enumerated set of error code definitions.</output_port>
+    </Action>
+    <Control ID="PipelineSequence"/>
+    <Decorator ID="RateController">
+      <input_port name="hz"
+                  default="10.0"
+                  type="double">Rate to throttle an action or a group of actions.</input_port>
+    </Decorator>
+    <Control ID="RecoveryNode">
+      <input_port name="number_of_retries"
+                  default="1"
+                  type="int">Number of retries.</input_port>
+    </Control>
+    <Action ID="Spin">
+      <input_port name="spin_dist"
+                  default="1.57"
+                  type="double">Spin distance (radians).</input_port>
+      <input_port name="time_allowance"
+                  default="10.0"
+                  type="double">Time to invoke behavior for, if exceeds considers it a stuck condition or failure case (seconds).</input_port>
+      <input_port name="is_recovery"
+                  default="true"
+                  type="bool">True if the action is being used as a recovery.</input_port>
+      <input_port name="disable_collision_checks"
+                  default="false"
+                  type="bool">Disable collision checking.</input_port>
+      <input_port name="server_name"
+                  type="string">Action server name. If not specified, `spin` is used.</input_port>
+      <input_port name="server_timeout"
+                  type="chrono::milliseconds">Action server timeout (ms). If not provided, uses the BT Navigator's `default_server_timeout` parameter value (20 ms by default).</input_port>
+      <output_port name="error_code_id"
+                   type="uint16">Spin error code. See `Spin` action message for the enumerated set of error codes.</output_port>
+      <output_port name="error_msg"
+                   type="string">Spin error message. See `Spin` action message for the enumerated set of error codes.</output_port>
+    </Action>
+    <Action ID="Wait">
+      <input_port name="wait_duration"
+                  default="1.0"
+                  type="double">Wait time (s).</input_port>
+      <input_port name="server_name"
+                  type="string">Action server name. If not specified, `wait` is used.</input_port>
+      <input_port name="server_timeout"
+                  type="chrono::milliseconds">Action server timeout (ms). If not provided, uses the BT Navigator's `default_server_timeout` parameter value (20 ms by default).</input_port>
+      <output_port name="error_code_id"
+                   type="uint16">Wait error code. See `Wait` action message for the enumerated set of error codes.</output_port>
+      <output_port name="error_msg"
+                   type="string">Wait error message. See `Wait` action message for the enumerated set of error codes.</output_port>
+    </Action>
+  </TreeNodesModel>
+
+</root>

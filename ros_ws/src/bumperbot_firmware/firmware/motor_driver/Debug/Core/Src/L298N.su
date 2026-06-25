@@ -1,0 +1,4 @@
+../Core/Src/L298N.c:10:19:driverInit	32	static
+../Core/Src/L298N.c:63:6:setdirection	16	static
+../Core/Src/L298N.c:78:6:motor_set_pwm	16	static
+../Core/Src/L298N.c:117:6:motor_stop	16	static

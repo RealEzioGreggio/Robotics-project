@@ -1,0 +1,66 @@
+planner_server:
+  ros__parameters:
+    expected_planner_frequency: 1.0 #Questo setta una soglia max per la freq del planner. Non è la sua freq
+    use_sim_time: true
+    planner_plugins: ["GridBased"]
+
+    GridBased:
+      plugin: "nav2_smac_planner/SmacPlanner2D" #Se sei su jazzy metti :: al posto di /
+      tolerance: 0.125 #tolerance fol planning
+      downsample_costmap: false
+      downsample_factor: 1
+      allow_unknown: true #Disattivalo se vuoi fare slam senno è capace che crea un percorso attraverso un ostacolo
+      max_iterations: 1000000
+      max_on_approach_iterations: 1000
+      max_planning_time: 2.0
+      cost_travel_multiplier: 2.0
+      use_final_approach_orientation: false
+      smoother:
+        max_iterations: 1000
+        w_smooth: 0.3
+        w_data: 0.2
+        tolerance: 1.0e-10
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      update_frequency: 1.0
+      publish_frequency: 1.0
+      global_frame: map
+      robot_base_frame: base_link
+      use_sim_time: true
+      robot_radius: 0.1 #Questo per dire che l'area occupata dal robot è un cerchio. Difatti lo puoi visualizzare si rviz by topic /published_footprint Polygon
+      resolution: 0.005
+      always_send_full_costmap: true
+      track_unknown_space: true #true: le unknown cell della mappa rimangono unknwn se false allora vengono trattate come free cell è utile per far navigare il robot in zone sconosciute (autonomous explorationo)
+
+      #Qui inserisci tutti i plugin che ti interessano.
+      #L'ordine è importante perche messi cosi significa che l'obstacle layer scrive sullo static_layer
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+
+        
+      satic_layer: #Nome plugin
+        plugin: "nav2_costmap_2d::StaticLayer" #Classe che implementa la logica. 
+        map_topic: "map"
+        map_subscribe_transient_local: true #Deve avere questa QoS senno non riceve la mappa
+        
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan #Lidar
+        scan: 
+          topic: /scan #topic
+          data_type: "LaserScan" #Messaggio del topic
+          max_obstacle_height: 2.0
+          marking: true #Gli ostacoli trovati dal laser saranno segnati sul layer
+          clearing: true #ray tracing: tutte le celle attraversate dal raggio del laser che ha trovato l'ostacolo saranno segnate come clear
+          combination_method: 1 #Se il layer precedente dice che una cella ha valore 100 e nell'attuale layer hai valore 0 usi il valore piu elevato per quella cella. Vale anche il contrario
+          raytrace_max_range: 3.0
+          raytrace_min_range: 0.0
+          obstacle_max_range: 2.5
+          obstacle_min_range: 0.0
+        
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        inflation_radius: 0.55 #Di quanto gonfi gli ostacoli. Questo parametro include gia robot_radius. Quindi il valore che inserisci deve essere >= robot_radius Quindi di questi 55cm i primi 10(robot_radius) hanno un costo elevatissimo e impediscono cosi al path planner di passare per quelle celle evitando di far incastrare o sbattere il robot contro gli ostacoli 
+        cost_scaling_factor: 3.0 

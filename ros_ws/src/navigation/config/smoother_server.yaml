@@ -1,0 +1,10 @@
+smoother_server:
+  ros__parameters:
+    use_sim_time: true
+    smoother_plugins: ["simple_smoother"]
+
+    simple_smoother:
+      plugin: "nav2_smoother::SimpleSmoother" #Carico un plugin gia presente in nav2
+      tolerance: 1.0e-10
+      max_its: 1000 #Max interations che l'algoritmo provera a eseguire nel cercare di fare lo smoothing del path
+      do_refinement: true #Dovrebbe aumentare la quelita dello smoothing 

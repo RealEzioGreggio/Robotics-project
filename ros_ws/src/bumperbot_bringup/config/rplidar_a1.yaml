@@ -1,0 +1,9 @@
+rplidar_node:
+  ros__parameters:
+    channel_type: serial #Uso una comunicazione seriale
+    serial_port: /dev/rplidar #Qui ci metti in genere /dev/ttyUSB0 o ACM0 ho usato una udev rule per ripuntare i nomi.
+    serial_baudrate: 115200
+    frame_id: laser_link #Frame che inserisce nel frame_id del LaserScan message. Ho messo il nome del link che ho definito nell'urdf del robot.
+    inverted: false #Dipende da come lo hai montato. Non è vero: ovviamente ho montato il sensora al contrario, variare questo parametro non risolve la situa. Cambia solo l'orientametno della mappa
+    angle_compensate: true
+    scan_mode: Sensitivity

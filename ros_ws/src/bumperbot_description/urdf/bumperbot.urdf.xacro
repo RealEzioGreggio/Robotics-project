@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+
+
+<!--I file xacro descrivono un robot. sono basati sui urdf ma sono piu agevoli da usare. Funzionano per tag
+ ogni tag descrive un componente e puo avere altri sottotag che descrivono un particolare attributo di quel
+ componente.
+ Le cartelle meshes e urdf devono essere installate nel CMakeLists-->
+
+ <!-- NON FIDARTI DELL'AUTOCOMPILATORE MANCO LUI SA QUELLO CHE SCRIVE-->
+
+
+<!-- Inizi con la descrizionedel robot e gli dai un nome. Questo è un file urdf quindi gli devi dire dove si trova la definizione
+ di un file xacro e gli passi la pagina wiki di ros-->
+<robot xmlns:xacro="https://www.ros.org/wiki/xacro" name="bumperbot">
+
+    <!-- Aggiungo un argomentoche mi permette di avviare la versione corretta del plug-in della control library-->
+    <!--In tal modo qualsiasi versione di ros usi userà sempre ignition.-->
+    <!--L'argomento lo dichiaro in questo file ma poi lo uso effettivamente nell'altro file-->
+    <xacro:arg name="is_ignition" default="true"></xacro:arg>
+
+    <!-- Argomento che mi serve per capire se vuoi il robottino simulato o quello vero di carne e ossa-->
+    <xacro:arg name="is_simulation" default="true"></xacro:arg>
+
+    <!--Includo gli altri file xacro. Il primo completa la descrizione del robot inserendo parametri necessari per la  
+    simulazione(Matrici di inerzia, attrito...) il secondo configura il plugin di controllo dei giunti(ros2_control) 
+    Ricorda che quando simuli non ti serve il joint_state_publisher(che simula il comportametno ideale dei giunti) ma 
+    ti serve qualcosa che simuli i giunti reali(in un ambiente reale). Se non hai un robot fisico da dove prelevare lo 
+    stato di questi giunti allora li estrai direttamente dalla simulazione con questo plugin(ros2_control)-->
+    <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.xacro"/>
+    <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_ros2_control.xacro"/>
+    
+    
+    <!-- Qui creiamo il primo link: sistema di riferimento del corpo principale del robot su di esso saranno collegati
+      tutti gli altri link-->
+    <link name="base_footprint">
+    </link>
+    
+    <link name="base_link">
+        <inertial>
+            <origin xyz="0 0 0.04" rpy="0.0 0.25 0.3" />
+            <mass value="8.2573504e-01"/>
+            <inertia ixx="2.2124416e-02" ixy="-1.2294101e-04" ixz="3.4938785e-04"
+               iyy="2.1193702e-02" iyz="-5.0120904e-05"
+               izz="2.0064271e-02" />
+        </inertial>
+        <!-- Volgio dargli un aspetto quindi creo questa struttura. In questo modo uso il file stl contenuto in meshes per
+         dargli l'aspetto che volgio -->
+        <visual>
+            <!-- Voglio descrivere posizione e orientamento della mesh rispetto al link a cui appartiene.
+             Per settarlo correttamente fai trial and error-->
+            <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/base_link.STL"/>
+            </geometry>
+        </visual>
+        <!-- Ora iniziamo a inserire i parametri utili a gazebo per la simulazione. Gli dico che l'hitbox è la stessa
+        della geometria-->
+        <collision>
+            <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/base_link.STL"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Colelghiamo i due frame che abbiamo creato fra di loro (base_footprint e base_link) con un joint
+     Con fixed si intende che non si possono allontanare l'uno dall'altro ne ruotare-->
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+        <!-- Questo origin è diverso da quello usato per le mesh: quello dentro visual fa riferimento alla mesh e al frame 
+         che hai creato. QUesto fa riferimento a 2 frame. Per settarli corretteamnte devi far riferimento a un disegno
+         tecnico del robot(in genere il taglio in sezione) vedi gli appunti-->
+        <origin rpy="0 0 0" xyz="0 0 0.033"/>           
+    </joint>
+
+    <link name="wheel_right_link">
+        <!-- Mettilo prima di visual-->
+        <inertial>
+            <origin xyz="0 -0.014 0" rpy="0 0 0" />
+            <mass value="0.0530086090966721" />
+            <inertia ixx="1.88176298336665E-05" ixy="-4.8444933029987E-10" ixz="1.88163708851143E-08"
+               iyy="3.11510738647764E-05" iyz="-6.93560663069607E-11"
+               izz="1.8801969558182E-05" />
+        </inertial>
+        <visual>
+            <!-- Le ruote spawnavano a cazzo ruotate male, rollio di 90° e passa la paura-->
+            <origin rpy="1.57 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/wheel_right_link.STL"/>
+            </geometry>
+        </visual>
+        <!-- In questo caso il file STL della ruota che uso è molto complesso(la mesh è piena di superfici piccole) 
+        per questo motivo uso uno sfera, la sua origine deve essere presa in rispetto al link wheel_right_link-->
+        <collision>
+            <origin xyz="0 -0.015 0" rpy="1.57 0 0" />
+            <geometry>
+                <sphere radius="0.033"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="wheel_right_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="wheel_right_link"/>
+        <!-- In pratica ho impostato il joint di tipo continuo(di rivoluzione) e gli devo dire su quale asse deve ruotare-->
+        <axis xyz="0.0 1 0.0"/> 
+        <!--Diamo anche una traslazione e rotazione del frame chil rispetto al padre-->
+        <origin rpy="0 0 0" xyz="0.022 -0.07 -0.033"/>       
+    </joint>
+
+
+    <link name="wheel_left_link">
+        <inertial>
+            <origin xyz="0 0.014 0" rpy="0 0 0" />
+            <mass value="0.0530086043217644" />
+            <inertia ixx="1.8792911368909E-05"  ixy="3.31256392204584E-10" ixz="-1.14082001662767E-08"
+               iyy="3.11510738759073E-05" iyz="-3.60499245082192E-10"
+               izz="1.88266886146847E-05" />
+        </inertial>
+        <visual>
+            <!-- Le ruote spawnavano a cazzo ruotate male, rollio di 90° e passa la paura-->
+            <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/wheel_left_link.STL"/>
+            </geometry>
+        </visual>
+        <!-- Roba per la simulazione-->
+        <collision>
+            <origin xyz="0 0.015 0" rpy="-1.57 0 0" />
+            <geometry>
+                <sphere radius="0.033"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="wheel_left_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="wheel_left_link"/>
+        <!-- In pratica ho impostato il joint di tipo continuo(di rivoluzione) e gli devo dire su quale asse deve ruotare-->
+        <axis xyz="0.0 1 0.0"/> 
+        <!--Diamo anche una traslazione e rotazione del frame child rispetto al padre-->
+        <origin rpy="0 0 0" xyz="0.022 0.07 -0.033"/>       
+    </joint>
+
+
+    <link name="caster_front_link">
+        <inertial>
+            <origin xyz="3.89968128948481E-07 2.40073004698083E-07 0.00219173397061506" rpy="0 0 0" />
+            <mass value="1.44379265037903E-06" />
+            <inertia ixx="7.23075276010246E-11" ixy="-6.10956883467859E-16" ixz="2.22849693525031E-15"
+               iyy="3.8713793085917E-11"  iyz="2.93909858781952E-15"
+               izz="1.00967486676306E-10" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/caster_front_link.STL"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.005"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Fixed: non si muove(ne trasla ne ruota) rispetto al parent frame-->
+    <joint name="caster_front_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_front_link"/>
+        <origin rpy="0 0 0" xyz="0.04755 0 -0.06"/>   
+    </joint>
+
+    <link name="caster_rear_link">
+        <inertial>
+            <origin xyz="3.8996812895542E-07 2.40073004698083E-07 0.00219173397061509" rpy="0 0 0" />
+            <mass value="1.44379265037902E-06" />
+            <inertia ixx="7.23075276010246E-11" ixy="-6.10956872363424E-16" ixz="2.22849693527207E-15"
+               iyy="3.87137930859167E-11" iyz="2.939098587861E-15"
+               izz="1.00967486676306E-10" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/caster_rear_link.STL"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.005"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Fixed: non si muove(ne trasla ne ruota) rispetto al parent frame-->
+    <joint name="caster_rear_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_rear_link"/>
+        <origin rpy="0 0 0" xyz="-0.04755 0 -0.06"/>
+    </joint>
+
+
+    <link name="imu_link"> <!-- PER L'AMOR DI DIO NON USARE CARATTERI MAIUSCOLI-->
+    <inertial>
+      <origin xyz="-0.00552433659106688 0.000168210391520346 0.000514000497342681" rpy="0 0 0" />
+      <mass value="0.000528415362211671" />
+      <inertia ixx="1.46176048428261E-08" ixy="1.40015117949421E-10" ixz="-1.99633872937403E-12"
+               iyy="8.59662482954888E-09" iyz="7.52375112767959E-12"
+               izz="2.30279421279312E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://bumperbot_description/meshes/imu_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://bumperbot_description/meshes/imu_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="0 0 0.0698986241758014" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="imu_link" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+  <link name="laser_link">
+    <inertial>
+      <origin xyz="-0.011945780406062 -0.000381929217680526 -0.0170649378129477" rpy="0 0 0" />
+      <mass value="0.073084435549317" />
+      <inertia ixx="1.96074931730795E-05" ixy="-3.62091076640009E-07" ixz="4.28230084046735E-07"
+               iyy="2.40983835136327E-05" iyz="1.50180909250652E-08"
+               izz="4.14184164228595E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://bumperbot_description/meshes/laser_link.STL" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://bumperbot_description/meshes/laser_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="laser_joint" type="fixed">
+    <origin xyz="-0.0050526 -0.0023221 0.1208" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="laser_link" />
+    <axis xyz="0 0 0" />
+  </joint>
+</robot>

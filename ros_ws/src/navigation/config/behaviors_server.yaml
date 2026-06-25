@@ -1,0 +1,26 @@
+behavior_server:
+  ros__parameters:
+    costmap_topic: local_costmap/costmap_raw #Usa una costmap per effettuare obstacle avoidance, gli passo quella locale perchè viene aggiornata piu frequentemente(quindi la prende da quella che pubblica il nav controller)
+    footprint: local_costmap/published_footprint 
+    cycle_frequency: 10.0 #Frequenza con la quale vuoi che si aggiorni
+    behavior_plugins: ["spin", "backup", "wait"] #I nomi a caso come al solito(sono i nomi che dichiarerari quando chiamerai l'action server) l'importante è la loro ocnfigurazione
+    global_frame: odom
+    robot_base_frame: base_link
+    transform_tolerance: 0.3 #Tolleranza usata per quando vai a prendere la transformata del robot da /tf
+    use_sim_time: true #Poi lo sovrascrivo dal yaml file
+    simulate_ahead_time: 2.0 #Una specie di controllo predittivo: Se il robot continua a spostarsi per "simulate_ahead_time secodni con il cmd_vel calcolato va a sbattere contro un ostacolo?
+    max_rotational_velocity: 1.0 #rad/s
+    min_rotation_velocity: 0.4 #rad/s
+    rotational_acc_lim: 3.2 #rad/s^2
+
+
+
+
+    spin:
+      plugin: "nav2_behaviors/Spin" # / su humble :: su jazzy
+
+    backup:
+      plugin: "nav2_behaviors/BackUp" # / su humble :: su jazzy
+
+    wait:
+      plugin: "nav2_behaviors/Wait"

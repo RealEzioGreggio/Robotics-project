@@ -1,0 +1,27 @@
+joy_teleop:
+  ros__parameters:
+    move:
+    #Gli dico che volgio che pubblica su topic (non voglio action o srv) e che il messaggio è di tipo geometry_msg/msg/TwistStamped
+    # Proprio come quello che pubblicavo prima direttamente da terminale
+      type: topic
+      interface_type: geometry_msgs/msg/TwistStamped
+      topic_name: input_joy/cmd_vel_stamped
+
+    #A quanto pare questo indica quale pulsante del joystick devi TENER premuto per far muovere il robot(sembra esista per
+    #motivi di sicurezza??)
+      deadman_buttons: [5] 
+
+    #Qui vai a mappare i tasti che inviano i comandi di velocita
+      axis_mappings:
+      #se vuoi incrementare o decrementare il val della velocita lineare lungo x usa la levetta sinistra quando la muovi su e giu
+        twist-linear-x: 
+          axis: 1
+          scale: 1.0
+          offset: 0.0
+      #Stessa cosa per la velocita angolare, usa l'asse orizzontale della levetta destra(varia solo se lo muovi a dx e sx)
+        twist-angular-z:
+          axis: 3
+          scale: 1.0 #Senza il - invii valori negativi spostando la levetta a destra e il robot gira a sinistra.
+          offset: 0.0
+
+

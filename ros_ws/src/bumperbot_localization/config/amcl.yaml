@@ -1,0 +1,57 @@
+amcl:
+  ros__parameters:
+    use_sim_time: True #Sara sovrascritto dal lauch file
+    base_frame_id: "base_footprint" #Frame che vuoi localizzare sulla mappa
+    global_frame_id: "map" #Fixed frame che vuoi considerare come globale. Non l'ho mai creato è il frame della mappa messo nell'angolino
+    odom_frame_id: "odom" #Frame di odometria. Posizione iniziale del robot
+    scan_topic: scan #Topic del LaserScanner
+    tf_broadcast: True #Il nodo pubblichera le trasformate fra map e base_footprint. Quindi localizzo il robot nel sistema di riferimento globale.
+    transform_tolerance: 1.0 #Tolleranza in secondi che amcl dedica nel calcolare e pubblicare le trasformate fra i 2 frame base_footprint e map 
+    save_pose_rate: 0.5 #Salva l'attuale pose del robot nel filesystem ??? Se spegni il robot e poi lo riaccendi riprende l'esecuzione. Magia nera se me lo chiedi
+
+    #Initial Guess
+    set_initial_pose: True #All'avvio l'amcl setta la posa iniziale al robot
+    initial_pose: 
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      yaw: 0.0
+
+    #Setto l'odometry motion model
+    robot_model_type: "nav2_amcl::DifferentialMotionModel" 
+    #Incertezza sulla misure lineari e angolari di posizione
+    alpha1: 0.2
+    alpha2: 0.2
+    alpha3: 0.2
+    alpha4: 0.2 
+
+    #Ora tocca al sensor model: le ho copiate dalla documentazione di amcl
+    laser_model_type: "likelihood_field"
+    beam_skip_distance: 0.5
+    beam_skip_error_threshold: 0.9
+    beam_skip_threshold: 0.3
+    do_beamskip: false
+    lambda_short: 0.1
+    laser_likelihood_max_dist: 2.0
+    laser_max_range: 100.0
+    laser_min_range: -1.0
+    max_beams: 60
+    pf_err: 0.05
+    pf_z: 0.99
+    save_pose_rate: 0.5
+    sigma_hit: 0.2
+    z_hit: 0.5
+    z_max: 0.05
+    z_rand: 0.5
+    z_short: 0.05
+
+    #Resampling algorithm quello che ti elimina le particelle se sono poco "pesate"
+    resample_interval: 1
+    max_particles: 2000
+    min_particles: 500
+    #Puoi usare questi due parametri per generare nuove particelle random nella mappa. Molto utile quando il robot è compeltamente perso
+    recovery_alpha_fast: 0.1
+    recovery_alpha_slow: 0.1
+    update_min_a: 0.2 #angolo minimo che il robot deve compiere per triggerare un update. In rad
+    update_min_d: 0.25 #Stessa roba ma con la distanza in m
+
