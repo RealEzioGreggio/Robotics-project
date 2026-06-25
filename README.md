@@ -99,7 +99,7 @@ ros2 launch bumperbot_bringup real_robot.launch.py
 
 Regarding the launch arguments you need to provide only **use_slam** and if you set it to false provide **map_name** as well.
 
-##Fast launch commads:
+## Fast launch commads:
 
 ```bash
 ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=true
