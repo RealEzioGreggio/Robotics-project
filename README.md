@@ -89,3 +89,33 @@ ros2 run leg_detector obj_detector.py
 
 **Note:** Several attempts may be required before the node starts correctly.
 
+### Operate real robot hardware
+
+In case you want to operate a real robot hardware:
+
+```bash
+ros2 launch bumperbot_bringup real_robot.launch.py
+```
+
+Regarding the launch arguments you need to provide only **use_slam** and if you set it to false provide **map_name** as well.
+
+##Fast launch commads:
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=true
+```
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=true
+```
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=false map_name:=small_house
+```
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=false map_name:=small_warehouse
+```
+
+
+

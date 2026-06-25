@@ -34,6 +34,18 @@ def generate_launch_description():
         )
     )
 
+    rviz_config_slam = os.path.join(
+        get_package_share_directory("bumperbot_description"),
+        "rviz",
+        "slam.rviz"
+    )
+
+    rviz_config_amcl = os.path.join(
+        get_package_share_directory("bumperbot_description"),
+        "rviz",
+        "amcl.rviz"
+    )
+
     controller = IncludeLaunchDescription(
         os.path.join(
             get_package_share_directory("bumperbot_controller"),
@@ -89,6 +101,24 @@ def generate_launch_description():
         output="screen"
     )
 
+    rviz_node_slam = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="screen",
+        arguments=["-d", rviz_config_slam],
+        condition=IfCondition(LaunchConfiguration("use_slam"))
+    )
+
+    rviz_node_amcl = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="screen",
+        arguments=["-d", rviz_config_amcl],
+        condition=UnlessCondition(LaunchConfiguration("use_slam"))
+    )
+
     return LaunchDescription([
 
         use_slam_arg,
@@ -98,6 +128,8 @@ def generate_launch_description():
         #safety_stop,
         localization,
         slam,
-        navigation
+        navigation,
+        rviz_node_slam,
+        rviz_node_amcl
 
     ])

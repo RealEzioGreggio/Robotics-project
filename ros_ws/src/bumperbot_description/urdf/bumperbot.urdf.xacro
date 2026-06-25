@@ -52,6 +52,7 @@
             <geometry>
                 <mesh filename="package://bumperbot_description/meshes/base_link.STL"/>
             </geometry>
+            <material name="light_grey"/>
         </visual>
         <!-- Ora iniziamo a inserire i parametri utili a gazebo per la simulazione. Gli dico che l'hitbox è la stessa
         della geometria-->
@@ -89,6 +90,7 @@
             <geometry>
                 <mesh filename="package://bumperbot_description/meshes/wheel_right_link.STL"/>
             </geometry>
+            <material name="black"/>
         </visual>
         <!-- In questo caso il file STL della ruota che uso è molto complesso(la mesh è piena di superfici piccole) 
         per questo motivo uso uno sfera, la sua origine deve essere presa in rispetto al link wheel_right_link-->
@@ -124,6 +126,7 @@
             <geometry>
                 <mesh filename="package://bumperbot_description/meshes/wheel_left_link.STL"/>
             </geometry>
+            <material name="black"/>
         </visual>
         <!-- Roba per la simulazione-->
         <collision>
@@ -157,6 +160,7 @@
             <geometry>
                 <mesh filename="package://bumperbot_description/meshes/caster_front_link.STL"/>
             </geometry>
+            <material name="red"/>
         </visual>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0" />
@@ -186,6 +190,7 @@
             <geometry>
                 <mesh filename="package://bumperbot_description/meshes/caster_rear_link.STL"/>
             </geometry>
+            <material name="red"/>
         </visual>
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0" />
@@ -216,9 +221,7 @@
       <geometry>
         <mesh filename="package://bumperbot_description/meshes/imu_link.STL" />
       </geometry>
-      <material name="">
-        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
+       <material name="blue"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -244,10 +247,11 @@
                izz="4.14184164228595E-05" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 3.14" />
       <geometry>
         <mesh filename="package://bumperbot_description/meshes/laser_link.STL" />
       </geometry>
+      <material name="black"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -263,4 +267,23 @@
     <child link="laser_link" />
     <axis xyz="0 0 0" />
   </joint>
+
+  <material name="blue">
+    <color rgba="0 0 1 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0.03 0.03 0.03 1"/>
+  </material>
+  <material name="silver">
+    <color rgba="0.79 0.82 0.93 1"/>
+  </material>
+  <material name="dark_grey">
+    <color rgba="0.2 0.2 0.2 1"/>
+  </material>
+  <material name="red">
+    <color rgba="1 0 0 1"/>
+  </material>
+  <material name="light_grey">
+    <color rgba="0.75 0.75 0.75 1"/>
+  </material>
 </robot>
