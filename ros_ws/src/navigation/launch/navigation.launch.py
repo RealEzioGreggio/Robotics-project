@@ -100,7 +100,7 @@ def generate_launch_description():
     nav2_lifecycle_manager = Node(
         package="nav2_lifecycle_manager",
         executable="lifecycle_manager",
-        name="lifecycle_manager_navigation", #Questo è il secondo che avvio ecoglio che gestisca solo planner, smoother e controller
+        name="lifecycle_manager_navigation", #Questo è il secondo che avvio (DEVONO AVERE NOMI UNICI!!)
         output="screen",
         parameters=[
             {"node_names": lifecycle_nodes}, #Ricorda che deve essere una lista

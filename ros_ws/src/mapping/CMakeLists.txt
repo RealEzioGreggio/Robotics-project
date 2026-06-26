@@ -18,7 +18,6 @@ find_package(tf2_ros REQUIRED)
 ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS
-  ${PROJECT_NAME}/mapping_w_pose.py
   DESTINATION lib/${PROJECT_NAME}
 )
 # uncomment the following section in order to fill in

@@ -14,9 +14,31 @@ The robot can perform **SLAM (Simultaneous Localization and Mapping)** in unknow
 * Global localization using AMCL.
 * Dynamic object/person following.
 * Shared software architecture for both simulation and real-world deployment.
-* Teleoperation via keyboard or joystick (Remember to plug in the controller before starting the container!)
+* Teleoperation via keyboard or joystick (All the inputs for the robot are managed by a mux node)
 * Configurable robot parameters, including wheel radius and wheel separation. It is recommended to keep the default values, which match the physical robot.
 * An additional node can inject measurement errors into the wheel radius and wheel separation parameters, producing a more realistic odometry model that better resembles real-world robot behavior.
+
+
+## Package Description
+
+* **bumperbot_bringup**: Launches all the required launch files from the other packages, providing a single entry point to start the entire system.
+
+* **bumperbot_controller**: Starts the `twist_mux` node, which manages velocity commands coming from the joystick, keyboard, or navigation stack. It also launches the differential-drive controller that solves the robot's inverse kinematics.
+
+* **bumperbot_description**: The core package for the robot description and simulation. It contains the robot model, simulation worlds, sensor configurations (including ROS–Gazebo bridges), and the `ros2_control` configuration.
+
+* **bumperbot_firmware**: Launches the custom hardware interface used by `ros2_control` to communicate with the real robot. It also contains the complete firmware project for the STM32 microcontroller.
+
+* **bumperbot_localization**: Launches both the local localization algorithm (EKF) and the global localization algorithm (AMCL).
+
+* **bumperbot_utils**: Contains additional utility nodes for the robot. At the moment, it includes a safety stop node and a frontier detector for autonomous exploration (**WIP**).
+
+* **mapping**: Launches the SLAM algorithm and contains maps of different simulated and real-world environments.
+
+* **navigation**: Launches the autonomous navigation stack, enabling the robot to reach a target position while avoiding obstacles.
+
+* **leg_detector**: Contains the object detector algorithm
+
 
 ## Known Issues
 
