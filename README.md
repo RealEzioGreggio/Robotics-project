@@ -147,7 +147,7 @@ In case you want to operate a real robot hardware:
 ros2 launch bumperbot_bringup real_robot.launch.py
 ```
 
-### Saefety stop
+### Safety stop
 
 If you want to avoid the robot to crash into an obstacles:
 
