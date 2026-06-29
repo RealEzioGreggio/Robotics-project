@@ -93,6 +93,34 @@ Available maps:
 
 Make sure the selected map matches the simulated environment.
 
+
+## Fast launch commads:
+
+### Small_house with slam
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=true
+```
+### Small_house with amcl
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=false map_name:=small_house
+```
+
+### Small_warehouse with slam
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=true
+```
+
+### Small_warehouse with amcl
+
+```bash
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=false map_name:=small_warehouse
+```
+
+**Note:** Remember to input the correct initial guess for the amcl algorithm at startup.
+
 ### Keyboard Teleoperation
 
 To control the robot using the keyboard:
@@ -119,31 +147,22 @@ In case you want to operate a real robot hardware:
 ros2 launch bumperbot_bringup real_robot.launch.py
 ```
 
-Regarding the launch arguments you need to provide only **use_slam** and if you set it to false provide **map_name** as well.
+### Saefety stop
 
-## Fast launch commads:
-
-### Small_house with slam
+If you want to avoid the robot to crash into an obstacles:
 
 ```bash
-ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=true
-```
-### Small_house with amcl
-
-```bash
-ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house use_slam:=false map_name:=small_house
+ros2 run bumperbot_utils safety_stop.py 
 ```
 
-### Small_warehouse with slam
+**Note:** You can add on rviz by the topic /zones a marker array that shows the actual zones. If an obstacles is in the yellow area the robot will slow down and if an obstacle enter the red area the robot will stop receiving commands velocity so you have to manually remove the obstacle or move the robot.
+
+### Frontier detector
+
+Automatically detects frontiers for autonomous SLAM.
 
 ```bash
-ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=true
-```
-
-### Small_warehouse with amcl
-
-```bash
-ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_warehouse use_slam:=false map_name:=small_warehouse
+ros2 run bumperbot_utils frontier_detector.py
 ```
 
 ## Troubleshooting

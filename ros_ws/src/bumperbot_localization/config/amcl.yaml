@@ -5,7 +5,7 @@ amcl:
     global_frame_id: "map" #Fixed frame che vuoi considerare come globale. Non l'ho mai creato è il frame della mappa messo nell'angolino
     odom_frame_id: "odom" #Frame di odometria. Posizione iniziale del robot
     scan_topic: scan #Topic del LaserScanner
-    tf_broadcast: True #Il nodo pubblichera le trasformate fra map e base_footprint. Quindi localizzo il robot nel sistema di riferimento globale.
+    tf_broadcast: True #Il nodo pubblichera le trasformate fra map e odom. Quindi localizzo il robot nel sistema di riferimento globale.
     transform_tolerance: 1.0 #Tolleranza in secondi che amcl dedica nel calcolare e pubblicare le trasformate fra i 2 frame base_footprint e map 
     save_pose_rate: 0.5 #Salva l'attuale pose del robot nel filesystem ??? Se spegni il robot e poi lo riaccendi riprende l'esecuzione. Magia nera se me lo chiedi
 

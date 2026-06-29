@@ -12,8 +12,6 @@ from nav2_msgs.action import NavigateToPose
 from tf_transformations import quaternion_from_euler
 
 
-#AVVIA LA CHIAMATA AL SERVER SOLO SE STA FERMO.
-
 #Creo una classe Pose il suo costruttore vuole px e py.
 #Questa Pose esprime la posizone del robot nella matirce della mappa quindi la posizione sara si una cella ma espressa con due indici x e y appunto
 class Pose:
@@ -128,7 +126,7 @@ class ObjDetector(Node):
         
         #Itero il vettore contenente le distanze
         for i  in range(len(scan.ranges)):
-            #Mi assicuro che non ci siano letture di tipo Inf. Ho deciso di scartare anche tutte le misure che superano i 2 metri(cerco di ridurre il rumore)
+            #Mi assicuro che non ci siano letture di tipo Inf. Ho deciso di scartare anche tutte le misure che superano i 3 metri(cerco di ridurre il rumore)
             if math.isinf(scan.ranges[i]) or scan.ranges[i] > 3.0:
                 continue #Skippa
 

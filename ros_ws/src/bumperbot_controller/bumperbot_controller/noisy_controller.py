@@ -19,9 +19,7 @@ from tf2_ros import TransformBroadcaster
 # LEGGERE I VALORI DA joit_states e calcolare posizione orientamento e velocita e fare odom e trasformate (da pubblcare)
 # priprio come simple_controller solo che questo ci aggiunge un errore. L'errore viene inserito sul raggio e separzione
 # delle ruote DI DEFAULT sia in simplecontroller che in questo nodo a meno che nel launch file non lo specifichi nullo.
-# Questo nodo mi serve per verificare le differenze con un errore nella stima degli stati del sistema, quindi è stato pensato
-# Per essere eseguito contemporaneamente a simple_controller esso si occupa del controllo del robot(motivo per cui ho 
-#cancellato quella parte in questo file) 
+# Questo nodo mi serve per verificare le differenze con un errore nella stima degli stati del sistema
 
 
 class NoisyController(Node):
