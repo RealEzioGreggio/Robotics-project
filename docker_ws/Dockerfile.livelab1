@@ -21,5 +21,6 @@ RUN apt update -y && apt install python3-pip -y
 RUN apt update -y && pip install transforms3d
 RUN apt update -y && apt install ros-humble-key-teleop
 RUN apt update -y && apt install ros-humble-plotjuggler-ros -y
+RUN apt update -y && apt install ros-humble-rplidar-ros
 
 # RUN apt install -y ros-humble-example-interfaces

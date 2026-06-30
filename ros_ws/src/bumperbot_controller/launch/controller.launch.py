@@ -54,6 +54,11 @@ def generate_launch_description():
         default_value="True",
     )
 
+    use_noisy_controller_arg = DeclareLaunchArgument(
+        "use_noisy_controller",
+        default_value="False",
+    )
+
     #Imposto degli argomenti al launch file(parametri del robot) e valori di default nel caso non gli specifichi
     wheel_radius_arg = DeclareLaunchArgument(
 
@@ -94,6 +99,7 @@ def generate_launch_description():
     wheel_separation = LaunchConfiguration("wheel_separation")
     use_simple_controller = LaunchConfiguration("use_simple_controller")
     use_sim_time = LaunchConfiguration("use_sim_time")
+    use_noisy_controller = LaunchConfiguration("use_noisy_controller")
 
 
     #Con questo Nodo puoi far spawnare il controller che vai a definire nel file yaml.
@@ -149,12 +155,16 @@ def generate_launch_description():
     )
 
 
-    noisy_controller_launch = OpaqueFunction(function=noisy_controller)
+    noisy_controller_launch = OpaqueFunction(
+    function=noisy_controller,
+    condition=IfCondition(use_noisy_controller)
+    )
 
     #Lista di funzionalita che vuoi avviare in questo launch file mettici tutti gli argomenti e nodi da avviari o anche altri laucnh file
     return LaunchDescription([
         
         use_sim_time_arg,
+        use_noisy_controller_arg,
         wheel_radius_arg,
         wheel_separation_arg,
         use_simple_controller_arg,
