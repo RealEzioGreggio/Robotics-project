@@ -64,4 +64,3 @@ def generate_launch_description():
 
 
 #Devi installare questo file vai nel Cmake e aggiungi anche le dipendenze
-#Sta merda funziona 
