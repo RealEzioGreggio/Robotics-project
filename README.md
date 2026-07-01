@@ -50,7 +50,7 @@ The robot can perform **SLAM (Simultaneous Localization and Mapping)** in unknow
 ### Other Issues
 
 * The `object_detector` node may experience startup issues. Several attempts may be required before it starts working correctly.
-* Since the robot continuously updates the global costmap while moving, certain obstacle trajectories (for example, a moving person being followed) may cause the navigation stack to fail and trigger a recovery behavior. This issue is difficult to describe precisely, so a demonstration video is provided.
+* Since the robot continuously updates the global costmap while moving, certain obstacle trajectories (for example, a moving person being followed) may cause the navigation stack to fail and trigger a recovery behavior.
 
 ## How to Use
 
