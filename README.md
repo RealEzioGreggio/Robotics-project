@@ -157,6 +157,16 @@ ros2 run bumperbot_utils safety_stop.py
 
 **Note:** You can add on rviz by the topic /zones a marker array that shows the actual zones. If an obstacles is in the yellow area the robot will slow down and if an obstacle enter the red area the robot will stop receiving commands velocity so you have to manually remove the obstacle or move the robot.
 
+### Local localization
+
+this will create base_footprint_ekf so you can confront it with base_footprint_noisy:
+
+```bash
+ros2 launch bumperbot_localization local_localization.launch.py 
+```
+
+**Note:** Start this before moving the robot around the map.
+
 ### Frontier detector
 
 Automatically detects frontiers for autonomous SLAM.
